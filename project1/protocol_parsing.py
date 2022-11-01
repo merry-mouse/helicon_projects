@@ -16,12 +16,10 @@ def decode(given_str):
     humidity = unpacked[1]
 
     # print to check 
-    print(temperature)
-    print(humidity)
+    # print(temperature)
+    # print(humidity)
 
-    # get rid of exponentioal and additional numbers after .
-
-
+    # convert the numbers to floats
     temperature = ("{:.2f}".format(temperature*10**-2))
     humidity = ("{:.2f}".format(humidity*10**-2))
 
