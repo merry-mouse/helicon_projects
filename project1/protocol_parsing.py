@@ -8,16 +8,16 @@ def decode(given_str):
     decoded = base64.b64decode(given_str)
 
     # unpacking it into a tuple
-    unpacked = struct.unpack('2f',decoded)
+    unpacked = struct.unpack('2i',decoded)
 
 
     # representing given integers into floats
     temperature = unpacked[0]
     humidity = unpacked[1]
 
-    # print to check number
-    # print(temperature)
-    # print(humidity)
+    # print to check 
+    print(temperature)
+    print(humidity)
 
     # get rid of exponentioal and additional numbers after .
 
