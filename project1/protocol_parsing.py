@@ -5,6 +5,7 @@ import base64
 def decode(given_str):
 
     # decoding the string from base 64 to bytes
+    
     decoded = base64.b64decode(given_str)
 
     # unpacking it into a tupleß
