@@ -8,8 +8,7 @@ def decode(given_str):
     decoded = base64.b64decode(given_str)
 
     # unpacking it into a tuple
-    unpacked = struct.unpack('2i',decoded)
-
+    unpacked = struct.unpack('<2i',decoded)
 
     # representing given integers into floats
     temperature = unpacked[0]
