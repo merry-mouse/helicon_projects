@@ -24,10 +24,12 @@ def decode(given_str):
     # print(humidity)
 
     # convert the numbers to floats
-    temperature = ("{:.2f}".format(temperature*10**-2))
-    humidity = ("{:.2f}".format(humidity*10**-2))
+    temperature = float("{:.2f}".format(temperature*10**-2))
+    humidity = float("{:.2f}".format(humidity*10**-2))
 
-    print(f"Temperature is: {temperature} and Humidity is: {humidity}")
+    return temperature, humidity
+   
+
 
 if __name__  == "__main__":
     # define ip address and the port
@@ -44,13 +46,24 @@ if __name__  == "__main__":
         s.listen() 
         # blocks execution and waits for an incoming connection
         conn, addr = s.accept() #  provides the client socket object conn
+        
         with conn:
             print(f"Connected by {addr}")
             # reads whatever data the client sends and echoes it back using conn.sendall()
+            
             while True:
                 # bufsize argument of 1024, the maximum amount of data to be received at once
                 data = conn.recv(1024) # will return 1024 bytes
-                decode(data)
+                # decode data recieved from the client
+                decoded_temp, decoded_humidity = decode(data)
+                
+                # check if client is misbehaving
+                if (decoded_temp >= -50.00 and decoded_temp <= 120.00)\
+                    and (decoded_humidity >= 0.00 and decoded_humidity <= 100.00):
+                    print(f"Temperature is: {decoded_temp} and Humidity is: {decoded_humidity}")
+                else:
+                    print("Misbehaved client, disconnected.")
+                    break
                 if not data:
                     break
                 conn.sendall(data)
