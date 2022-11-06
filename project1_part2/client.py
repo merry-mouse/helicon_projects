@@ -7,7 +7,7 @@ import base64
 # generate random floats for temp and humidity in a given range
 def make_random_floats():
     # use uniform module to generate floats for temp and humidity
-    random_humidity_float = random.uniform(0.00, 100.00)
+    random_humidity_float = random.uniform(-100.00, 100.00)
     random_temp_float = random.uniform(-50.00, 120.00)
 
     # convert randomized floats to int
@@ -38,10 +38,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     while True:
         encoded_data = make_random_floats()
         s.sendall(encoded_data)
+        print(f"Sent encoded data")
         # read the server’s reply
-        data = s.recv(1024).decode("utf-8") # will return up to 1024 bytes
-        print(f"Sent encoded data: {data!r}")
+        data = s.recv(1024) # will return up to 1024 bytes
+        print(f"Server response: {data!r}")
+        if data == b"Disconnected":
+            break
+        # if positive response from the server, keep sending package
         time.sleep(10.0)
-
-
-    

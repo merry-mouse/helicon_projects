@@ -62,8 +62,14 @@ if __name__  == "__main__":
                     and (decoded_humidity >= 0.00 and decoded_humidity <= 100.00):
                     print(f"Temperature is: {decoded_temp} and Humidity is: {decoded_humidity}")
                 else:
-                    print("Misbehaved client, disconnected.")
+                    print("Misbehaved client disconnected.")
+                    conn.sendall(b"Disconnected")
+                    conn.close()
                     break
                 if not data:
+                    conn.close()
+                    conn.sendall(b"Disconnected")
                     break
-                conn.sendall(data)
+                conn.sendall(b"Connected")
+    s.close()
+    
