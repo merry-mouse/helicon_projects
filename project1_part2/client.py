@@ -23,26 +23,27 @@ def make_random_floats():
     return encoded
 
 
-# define ip address and the port
-HOST = "127.0.0.1"  # The server's hostname or IP address
-PORT = 65432  # The port used by the server
+if __name__ == "__main__":
+    # define ip address and the port
+    HOST = "127.0.0.1"  # The server's hostname or IP address
+    PORT = 65432  # The port used by the server
 
-# creating server socket
-# AF_INET is the Internet address family for IPv4
-# sock_stream uses TCP protocol by default
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    # creating server socket
+    # AF_INET is the Internet address family for IPv4
+    # sock_stream uses TCP protocol by default
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
-    s.connect((HOST, PORT))
+        s.connect((HOST, PORT))
 
-    # send package with randomized numbers every 10 seconds
-    while True:
-        encoded_data = make_random_floats()
-        s.sendall(encoded_data)
-        print(f"Sent encoded data")
-        # read the server’s reply
-        data = s.recv(1024) # will return up to 1024 bytes
-        print(f"Server response: {data!r}")
-        if data == b"Disconnected":
-            break
-        # if positive response from the server, keep sending package
-        time.sleep(10.0)
+        # send package with randomized numbers every 10 seconds
+        while True:
+            encoded_data = make_random_floats()
+            s.sendall(encoded_data)
+            print(f"Sent encoded data")
+            # read the server’s reply
+            data = s.recv(1024) # will return up to 1024 bytes
+            print(f"Server response: {data!r}")
+            if data == b"Disconnected":
+                break
+            # if positive response from the server, keep sending package
+            time.sleep(10.0)
