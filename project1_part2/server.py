@@ -50,8 +50,9 @@ if __name__  == "__main__":
         with conn:
             print(f"Connected by {addr}")
             # reads whatever data the client sends and echoes it back using conn.sendall()
-            
             while True:
+                # set timeout for the connection (seconds)
+                conn.settimeout(10.1)
                 # bufsize argument of 1024, the maximum amount of data to be received at once
                 data = conn.recv(1024) # will return 1024 bytes
                 # decode data recieved from the client
