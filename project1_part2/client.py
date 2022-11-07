@@ -7,7 +7,7 @@ import base64
 # generate random floats for temp and humidity in a given range
 def make_random_floats():
     # use uniform module to generate floats for temp and humidity
-    random_humidity_float = random.uniform(-100.00, 100.00)
+    random_humidity_float = random.uniform(0.00, 100.00)
     random_temp_float = random.uniform(-50.00, 120.00)
 
     # convert randomized floats to int
