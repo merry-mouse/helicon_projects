@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block body %}
+  {% csrf_token %} 
+  {{ form|crispy }}
+  <center>
+    <ul class="list-group"> <b>Registered Users:</b>
+      <br>
+      {% for result in displayusername %}
+      <li class="list-group-item">{{ result.username }}</li>
+      {% endfor %}
+    </ul>
+  </center>
+{% endblock body %}
+
+
