@@ -10,23 +10,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # used in CBVs to redirect the users to a specific URL
 from django.urls import reverse_lazy
 # to retrieve and update database rows (photo objects)
-from .models import photo
+from .models import Photo
 
 
 # Create your views here.
 class PhotoListView(ListView):
-    model = photo
+    model = Photo
     template_name = 'photoapp/list.html'
     context_object_name = 'photos'
 
 class PhotoDetailView(DetailView):
-    model = photo
+    model = Photo
     template_name = 'photoapp/detail.html'
     context_object_name = 'photo'
 
 
 class PhotoCreateView(LoginRequiredMixin, CreateView):
-    model = photo
+    model = Photo
     # create a form with these fields
     fields = ['title', 'description', 'image']
     template_name = 'photoapp/create.html'
@@ -45,7 +45,7 @@ class PhotoCreateView(LoginRequiredMixin, CreateView):
 # actually submitted it
 class UserIsSubmitter(UserPassesTestMixin):
     def get_photo(self):
-        return get_object_or_404(photo, pk=self.kwargs.get('pk'))
+        return get_object_or_404(Photo, pk=self.kwargs.get('pk'))
 
     def test_func(self):
         if self.request.user.is_authenticated:
@@ -56,7 +56,7 @@ class UserIsSubmitter(UserPassesTestMixin):
 
 class PhotoUpdateView(UserIsSubmitter, UpdateView):
     template_name = 'photoapp/update.html'
-    model = photo
+    model = Photo
     # defines the fields the user will be able to edit
     fields = ['title', 'description']
     success_url = reverse_lazy('photo:list')
@@ -64,11 +64,11 @@ class PhotoUpdateView(UserIsSubmitter, UpdateView):
 
 class PhotoDeleteView(UserIsSubmitter, DeleteView):
     template_name = 'photoapp/delete.html'
-    model = photo
+    model = Photo
     success_url = reverse_lazy('photo:list')
 
 
 class PhotoMyListView(ListView):
-    model = photo
+    model = Photo
     template_name = 'photoapp/mylist.html'
     context_object_name = 'myphotos'

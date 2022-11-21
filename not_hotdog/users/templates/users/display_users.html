@@ -7,8 +7,8 @@
   <center>
     <ul class="list-group"> <b>Registered Users:</b>
       <br>
-      {% for result in displayusername %}
-      <li class="list-group-item">{{ result.username }}</li>
+      {% for user in usernames %}
+      <li class="list-group-item">{{ user.username }}</li>
       {% endfor %}
     </ul>
   </center>

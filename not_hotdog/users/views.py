@@ -1,4 +1,4 @@
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm # to create a new user
 from django.urls import reverse_lazy
@@ -31,9 +31,13 @@ class CustomLoginView(LoginView):
     template_name = "users/login.html"
 
 
-def showusername(request):
-    displaynames = User.objects.all()
-    return render(request, "users/display_users.html", {"displayusername":displaynames})
+# def showusername(request):
+#     displaynames = User.objects.all()
+#     return render(request, "users/display_users.html", {"displayusername":displaynames})
 
 
     
+class ShowUserNameView(ListView):
+    model = User
+    template_name = 'users/display_users.html'
+    context_object_name = 'usernames'

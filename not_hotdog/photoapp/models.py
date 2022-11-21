@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 
 
-class photo(models.Model):
+class Photo(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=300)
     created = models.DateTimeField(auto_now_add=True)
