@@ -1,2 +1,4 @@
+# files to ignore 
 media/
+
 *.sqlite3
