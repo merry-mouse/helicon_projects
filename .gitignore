@@ -1,2 +1,4 @@
+# ignore all the media files
 **/media
-*.sqlite3
+# ignore databases
+*.sqlite.3
