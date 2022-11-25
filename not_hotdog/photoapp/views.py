@@ -12,6 +12,9 @@ from django.urls import reverse_lazy
 # to retrieve and update database rows (photo objects)
 from .models import Photo
 
+from next_prev import next_in_order, prev_in_order
+from django.core.paginator import Paginator
+
 
 # Create your views here.
 class PhotoListView(ListView):
@@ -19,12 +22,59 @@ class PhotoListView(ListView):
     template_name = 'photoapp/list.html'
     context_object_name = 'photos'
 
+
 class PhotoDetailView(DetailView):
     model = Photo
     template_name = 'photoapp/detail.html'
     context_object_name = 'photo'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+
+    
+        current_obj = Photo.objects.get(id=self.kwargs['pk'])
+        next = next_in_order(current_obj)
+        # prev_in_order(next) == current_obj # True
+        # last = prev_in_order(current_obj, loop=True)
+        previous = prev_in_order(current_obj)
+
+        if next != None:
+            context['next_pk'] = next.id
+        else:
+            context['next_pk'] = Photo.objects.first().id
+
+        if previous != None:
+            context['prev_pk'] = previous.id
+        else:
+            context['prev_pk'] = Photo.objects.last().id
+
+        return context
+
+
+
+
+        # prev_pk = (
+        #     self.get_queryset()
+        #     .filter()
+        #     .reverse().values('pk')[:1]
+        # )
+        # # There may be no next page
+        # if prev_pk:
+        #     context['prev_pk'] = prev_pk[0]['pk']
+
+        # next_pk = (
+        #     self.get_queryset()
+        #     .filter()
+        #     .values('pk').values('pk')[:1]
+        # )
+        # # There may be no next page
+        # if next_pk:
+        #     context['next_pk'] = next_pk[0]['pk']
+
+        # return context
+
+        
 class PhotoCreateView(LoginRequiredMixin, CreateView):
     model = Photo
     # create a form with these fields

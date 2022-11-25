@@ -22,6 +22,14 @@
     </ul>
     <p>{{ photo.description }}</p>
   </div>
+  <div class="mx-auto">
+      <p class="text-center">
+        <span><a href="{% url 'photo:detail' prev_pk %}" class="text-primary px-2">Previous</a></span>
+        <span><a href="{% url 'photo:detail' next_pk %}" class="text-danger px-2">Next</a></span>
+
+      </p>
+    </div> 
+
 </div>
 
 {% endblock body %}
