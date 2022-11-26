@@ -2,3 +2,6 @@
 **/media
 # ignore databases
 *.sqlite.3
+# ignore othet projects
+**/learning_django
+**/venvs
