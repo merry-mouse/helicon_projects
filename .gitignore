@@ -5,3 +5,4 @@
 # ignore othet projects
 **/learning_django
 **/venvs
+**/.vscode
