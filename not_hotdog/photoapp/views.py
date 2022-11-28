@@ -11,18 +11,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 # to retrieve and update database rows (photo objects)
 from .models import Photo
+from django.contrib.auth.models import User
+from django.http import HttpRequest, HttpResponse
 
 from next_prev import next_in_order, prev_in_order
-from django.core.paginator import Paginator
 
-
-# Create your views here.
+# Listing all photos on the site
 class PhotoListView(ListView):
     model = Photo
     template_name = 'photoapp/list.html'
     context_object_name = 'photos'
 
 
+# showing details of the photos
 class PhotoDetailView(DetailView):
     model = Photo
     template_name = 'photoapp/detail.html'
@@ -30,15 +31,11 @@ class PhotoDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-
-    
         current_obj = Photo.objects.get(id=self.kwargs['pk'])
         next = next_in_order(current_obj)
         # prev_in_order(next) == current_obj # True
         # last = prev_in_order(current_obj, loop=True)
         previous = prev_in_order(current_obj)
-
         if next != None:
             context['next_pk'] = next.id
         else:
@@ -53,28 +50,7 @@ class PhotoDetailView(DetailView):
 
 
 
-
-        # prev_pk = (
-        #     self.get_queryset()
-        #     .filter()
-        #     .reverse().values('pk')[:1]
-        # )
-        # # There may be no next page
-        # if prev_pk:
-        #     context['prev_pk'] = prev_pk[0]['pk']
-
-        # next_pk = (
-        #     self.get_queryset()
-        #     .filter()
-        #     .values('pk').values('pk')[:1]
-        # )
-        # # There may be no next page
-        # if next_pk:
-        #     context['next_pk'] = next_pk[0]['pk']
-
-        # return context
-
-        
+# allows create upload photos fro registered users
 class PhotoCreateView(LoginRequiredMixin, CreateView):
     model = Photo
     # create a form with these fields
@@ -104,6 +80,7 @@ class UserIsSubmitter(UserPassesTestMixin):
             raise PermissionDenied('Sorry you are not allowed here')
 
 
+# allows to ipdate photo for the creator
 class PhotoUpdateView(UserIsSubmitter, UpdateView):
     template_name = 'photoapp/update.html'
     model = Photo
@@ -118,7 +95,39 @@ class PhotoDeleteView(UserIsSubmitter, DeleteView):
     success_url = reverse_lazy('photo:list')
 
 
+# listing personal photos for registered users
 class PhotoMyListView(ListView):
     model = Photo
     template_name = 'photoapp/mylist.html'
     context_object_name = 'myphotos'
+
+
+
+
+# showing details of user photos, allows to swipe to user next photo
+class UserPhotosDetailView(DetailView):
+    model = Photo
+    template_name = 'photoapp/userphotosdetail.html'
+    context_object_name = 'userphoto'
+    # only users photos must be in a queryset
+    def get_queryset(self):
+        return Photo.objects.filter(submitter=self.request.user.id)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(f"Context: {context}")
+        print(f"NEW Context: {context}")
+        current_obj = Photo.objects.get(id=self.request.user.id)
+        print(current_obj)       
+        next = next_in_order(current_obj)
+        previous = prev_in_order(current_obj)
+        if next != None:
+            context['next_pk'] = next.id
+        else:
+            context['next_pk'] = Photo.objects.first().id
+
+        if previous != None:
+            context['prev_pk'] = previous.id
+        else:
+            context['prev_pk'] = Photo.objects.first().id
+        return context
+
