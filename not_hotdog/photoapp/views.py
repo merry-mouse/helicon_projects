@@ -114,10 +114,7 @@ class UserPhotosDetailView(DetailView):
         return Photo.objects.filter(submitter=self.request.user.id)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(f"Context: {context}")
-        print(f"NEW Context: {context}")
-        current_obj = Photo.objects.get(id=self.request.user.id)
-        print(current_obj)       
+        current_obj = Photo.objects.get(id=self.request.user.id)   
         next = next_in_order(current_obj)
         previous = prev_in_order(current_obj)
         if next != None:
