@@ -1,0 +1,35 @@
+{% extends 'base.html' %} 
+
+{% block body %}
+<div class="mx-auto">
+  <h1 class="text-center">{{ userphoto.title }}</h1>
+  <p class="text-center fw-light">Photo detail:<br></p>
+  <p class="text-center fw-light">Uploaded on: {{ userphoto.created }} <br> By {{photo.submitter.username}}</p>
+  {% if user == userphoto.submitter %}
+    <p class="text-center">
+      <span><a href="{% url 'photo:update' userphoto.id %}" class="text-primary px-2">Edit</a></span>
+      <span><a href="{% url 'photo:delete' userphoto.id %}" class="text-danger px-2">Delete</a></span>
+    </p>
+  {% endif %}
+</div>
+<div class="row pb-5">
+  <div class="col-md-8">
+    <img src="{{userphoto.image.url}}" alt="" width="100%" />
+  </div>
+  <div class="col-md-4">
+    <h4>Description:</h4>
+    <ul class="list-group list-group-horizontal-lg list-unstyled py-4">
+    </ul>
+    <p>{{ userphoto.description }}</p>
+  </div>
+  <div class="mx-auto">
+      <p class="text-center">
+        <span><a href="{% url 'photo:userphotosdetail' prev_pk %}" class="text-primary px-2">Previous</a></span>
+        <span><a href="{% url 'photo:userphotosdetail' next_pk %}" class="text-danger px-2">Next</a></span>
+
+      </p>
+    </div> 
+
+</div>
+
+{% endblock body %}
