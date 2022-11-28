@@ -31,12 +31,7 @@ class CustomLoginView(LoginView):
     template_name = "users/login.html"
 
 
-# def showusername(request):
-#     displaynames = User.objects.all()
-#     return render(request, "users/display_users.html", {"displayusername":displaynames})
 
-
-    
 class ShowUserNameView(ListView):
     model = User
     template_name = 'users/display_users.html'
