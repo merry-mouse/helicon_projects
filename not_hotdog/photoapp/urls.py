@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 from .views import (
     PhotoListView,
     PhotoDetailView,
@@ -22,7 +23,7 @@ urlpatterns = [
 
     path('photo/<int:pk>/delete/', PhotoDeleteView.as_view(), name='delete'),
 
-    path('photo/mylist/', PhotoMyListView.as_view(), name='mylist'),
+    path('photo/mylist/', login_required(PhotoMyListView.as_view()), name='mylist'),
 
     path('photo/myphotodetail/<int:pk>/', UserPhotosDetailView.as_view(), name='userphotosdetail'),
 
