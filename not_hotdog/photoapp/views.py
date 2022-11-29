@@ -13,14 +13,17 @@ from django.urls import reverse_lazy
 from .models import Photo
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse
-
+# to make next and previous buttons
 from next_prev import next_in_order, prev_in_order
+from django.contrib.auth.decorators import login_required
+
 
 # Listing all photos on the site
 class PhotoListView(ListView):
     model = Photo
     template_name = 'photoapp/list.html'
     context_object_name = 'photos'
+
 
 
 # showing details of the photos
@@ -50,7 +53,8 @@ class PhotoDetailView(DetailView):
 
 
 
-# allows create upload photos fro registered users
+# allows upload photos for registered users
+
 class PhotoCreateView(LoginRequiredMixin, CreateView):
     model = Photo
     # create a form with these fields
