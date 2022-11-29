@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 
 
-
 # to allow the user to register through the site
 class SignUpView(CreateView):
     template_name = 'users/signup.html'
@@ -31,8 +30,8 @@ class CustomLoginView(LoginView):
     template_name = "users/login.html"
 
 
-
 class ShowUserNameView(ListView):
     model = User
     template_name = 'users/display_users.html'
     context_object_name = 'usernames'
+    
