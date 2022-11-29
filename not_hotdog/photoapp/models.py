@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 
-
 class Photo(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=300)
@@ -14,5 +13,4 @@ class Photo(models.Model):
         return self.title
 
 
-# Create your models here.
 
