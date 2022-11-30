@@ -24,6 +24,22 @@ class PhotoListView(ListView):
     template_name = 'photoapp/list.html'
     context_object_name = 'photos'
 
+# showing photo tags
+class PhotoTagListView(PhotoListView):
+    template_name = 'photoapp/taglist.html'
+    # custom method
+    # receive the tag slug from the response Django is going to take and return it
+    def get_tag(self):
+        return self.kwargs.get('tag')
+
+    def get_queryset(self):
+        return self.model.objects.filter(tags__slug=self.get_tag())
+
+    # return the tag passed to the URL
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.get_tag
+        return context
 
 
 # showing details of the photos
@@ -52,13 +68,11 @@ class PhotoDetailView(DetailView):
         return context
 
 
-
 # allows upload photos for registered users
-
 class PhotoCreateView(LoginRequiredMixin, CreateView):
     model = Photo
     # create a form with these fields
-    fields = ['title', 'description', 'image']
+    fields = ['title', 'description', 'image', 'tags']
     template_name = 'photoapp/create.html'
     # Users will be redirected to the photo dashboard 
     # if the photo creation was successful
@@ -74,6 +88,7 @@ class PhotoCreateView(LoginRequiredMixin, CreateView):
 # checks if the user that’s trying to update or delete a photo 
 # actually submitted it
 class UserIsSubmitter(UserPassesTestMixin):
+    # custom method
     def get_photo(self):
         return get_object_or_404(Photo, pk=self.kwargs.get('pk'))
 
@@ -89,7 +104,7 @@ class PhotoUpdateView(UserIsSubmitter, UpdateView):
     template_name = 'photoapp/update.html'
     model = Photo
     # defines the fields the user will be able to edit
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'tags']
     success_url = reverse_lazy('photo:list')
 
 
@@ -104,8 +119,6 @@ class PhotoMyListView(ListView):
     model = Photo
     template_name = 'photoapp/mylist.html'
     context_object_name = 'myphotos'
-
-
 
 
 # showing details of user photos, allows to swipe to user next photo
