@@ -23,6 +23,7 @@ class PhotoListView(ListView):
     model = Photo
     template_name = 'photoapp/list.html'
     context_object_name = 'photos'
+    
 
 # showing photo tags
 class PhotoTagListView(PhotoListView):
