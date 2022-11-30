@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
+from photoapp.models import Photo
+
 
 # check if not registered user can see photo list
 class PhotoListNotRegisteredUserTest(TestCase):
@@ -37,18 +40,36 @@ class UpdateSomeonesPhotoRegisteredUserTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-# upload, update and delete a photo for registered user
-class UploadUpdateDeletePhotoRegisteredUserTest(TestCase):
+# check if registered user can upload an image
+class UploadPhotoRegisteredUserTest(TestCase):
     def setUp(self):
         self.credentials = {
             'username': 'test',
             'password': 'secretpass123',
             }
         User.objects.create_user(**self.credentials)
+    # test if regisrered user can go to "add photo" page
     def test_picture_upload(self):
-        User = get_user_model()
         self.client.login(username='test', password='secretpass123')
         response = self.client.get("/photoapp/photo/create/")
         self.assertEqual(response.status_code, 200)
+    # test if registered user can upload new photo
+    def test_create_new_photo(self):
+        self.client.login(username='test', password='secretpass123')
+        data = {"title": "this is test title",
+        "description": "this is test description",
+        "image": SimpleUploadedFile(name='photofortest.png',
+        content=open("/Users/stash/Desktop/my_projects/not_hotdog/tests/picturefortst.png", 'rb').read(), content_type='image/jpeg')}
+        response = self.client.post("/photoapp/photo/create/", data=data)
+        self.assertEqual(Photo.objects.count(),1)
+        self.assertRedirects(response,"/photoapp/", status_code=302)
+
+
+
+
+
+ 
+
+
 
 
