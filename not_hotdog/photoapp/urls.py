@@ -7,7 +7,8 @@ from .views import (
     PhotoUpdateView,
     PhotoDeleteView,
     PhotoMyListView,
-    UserPhotosDetailView
+    UserPhotosDetailView,
+    PhotoTagListView
 )
     
 # namespace of the app
@@ -24,6 +25,8 @@ urlpatterns = [
     path('photo/<int:pk>/delete/', PhotoDeleteView.as_view(), name='delete'),
 
     path('photo/mylist/', login_required(PhotoMyListView.as_view()), name='mylist'),
+
+    path('photo/tag/<slug:tag>/', PhotoTagListView.as_view(), name='tag'),
 
     path('photo/myphotodetail/<int:pk>/', UserPhotosDetailView.as_view(), name='userphotosdetail'),
 
