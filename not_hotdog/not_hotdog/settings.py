@@ -46,7 +46,6 @@ LOGOUT_REDIRECT_URL = 'photo:list'
 # Application definition
 
 INSTALLED_APPS = [
-    'crispy_forms',
     'users',
     'photoapp',
     'django.contrib.admin',
@@ -57,7 +56,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    # 3 party apps
+    'crispy_forms',
+    'taggit',
 ]
+# configures the tags to be case insensitive
+TAGGIT_CASE_INSENSITIVE = True
 
 # Indicates the frontend framework django crispy forms will use
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
