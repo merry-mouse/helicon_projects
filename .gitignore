@@ -7,3 +7,4 @@
 **/venvs
 **/.vscode
 **settings.py
+**/env
