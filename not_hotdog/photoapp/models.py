@@ -10,9 +10,14 @@ class Photo(models.Model):
     image = models.ImageField(upload_to='photos/')
     submitter = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     tags = TaggableManager(blank=True) 
+    hotdog_flag = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        if 'hotdog' in self.title.lower():
+            self.hotdog_flag = True
+        return super(Photo, self).save(*args, **kwargs)
 
 
