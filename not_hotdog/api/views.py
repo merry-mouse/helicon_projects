@@ -5,7 +5,7 @@ from photoapp.models import Photo
 from .serializers import PhotoSerializer, PhotoDetailSerializer
 from rest_framework.views import APIView
 from django.http import Http404
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser
  
 
 class PhotoList(APIView):
