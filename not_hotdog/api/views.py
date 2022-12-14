@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from photoapp.models import Photo
-from .serializers import PhotoSerializer, PhotoDetailSerializer
+from .serializers import PhotoSerializer, PhotoDetailSerializerGet, PhotoDetailSerializerPutDelete
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.permissions import IsAdminUser
@@ -17,9 +17,9 @@ class PhotoList(APIView):
         serializer = PhotoSerializer(photos, many=True)
         return Response(serializer.data)
 
-class PhotoDetail(APIView):
+class PhotoDetailGetView(APIView):
     """
-    Retrieve, update or delete a photo instance.
+    Retrieve a photo instance.
     """
     permission_classes = (IsAdminUser,)
     def get_object(self, pk):
@@ -31,12 +31,25 @@ class PhotoDetail(APIView):
 
     def get(self, request, pk, format=None):
         photo = self.get_object(pk)
-        serializer = PhotoSerializer(photo)
+        serializer = PhotoDetailSerializerGet(photo)
         return Response(serializer.data)
+
+
+class PhotoDetailPutDeleteView(APIView):
+    """
+    Update, delete a photo instance.
+    """
+    permission_classes = (IsAdminUser,)
+    def get_object(self, pk):
+        try:
+            return Photo.objects.get(pk=pk)
+        except Photo.DoesNotExist:
+            raise Http404
+
 
     def put(self, request, pk, format=None):
         photo = self.get_object(pk)
-        serializer = PhotoDetailSerializer(photo, data=request.data)
+        serializer = PhotoDetailSerializerPutDelete(photo, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
