@@ -14,12 +14,21 @@ class PhotoSerializer(TaggitSerializer, serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PhotoDetailSerializer(TaggitSerializer, serializers.ModelSerializer):
+class PhotoDetailSerializerGet(TaggitSerializer, serializers.ModelSerializer):
     
     tags = TagListSerializerField()
-
+    
     class Meta:
 
         model = Photo
 
-        fields = ["id", "title", "tags"]
+        fields = "__all__"
+
+
+class PhotoDetailSerializerPutDelete(serializers.ModelSerializer):
+ 
+    class Meta:
+
+        model = Photo
+
+        fields = ["id", "title", "not_hotdog_flag"]
