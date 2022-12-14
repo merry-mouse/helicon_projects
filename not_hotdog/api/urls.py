@@ -6,5 +6,7 @@ urlpatterns = [
 
     path('photos/', views.PhotoList.as_view()),
 
-    path('photo_detail/<int:pk>/', views.PhotoDetail.as_view()),
+    path('get_detail/<int:pk>/', views.PhotoDetailGetView.as_view()),
+
+    path('update_detail/<int:pk>/', views.PhotoDetailPutDeleteView.as_view()),
 ]
