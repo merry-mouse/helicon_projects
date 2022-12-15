@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from photoapp.models import Photo
-from .serializers import PhotoSerializer, PhotoDetailSerializerGet, PhotoDetailSerializerPutDelete
+from .serializers import PhotoSerializer, PhotoDetailSerializerPutDelete
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.permissions import IsAdminUser
@@ -28,10 +28,9 @@ class PhotoDetailGetView(APIView):
         except Photo.DoesNotExist:
             raise Http404
     
-
     def get(self, request, pk, format=None):
         photo = self.get_object(pk)
-        serializer = PhotoDetailSerializerGet(photo)
+        serializer = PhotoSerializer(photo)
         return Response(serializer.data)
 
 
