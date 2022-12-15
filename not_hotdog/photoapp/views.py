@@ -11,11 +11,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 # to retrieve and update database rows (photo objects)
 from .models import Photo
-from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponse
 # to make next and previous buttons
 from next_prev import next_in_order, prev_in_order
-from django.contrib.auth.decorators import login_required
+# to send a message with the rabbitmq
+from api.serializers import PhotoSerializer
 
 
 # Listing all photos on the site
@@ -53,8 +52,6 @@ class PhotoDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         current_obj = Photo.objects.get(id=self.kwargs['pk'])
         next = next_in_order(current_obj)
-        # prev_in_order(next) == current_obj # True
-        # last = prev_in_order(current_obj, loop=True)
         previous = prev_in_order(current_obj)
         if next != None:
             context['next_pk'] = next.id
@@ -85,6 +82,9 @@ class PhotoCreateView(LoginRequiredMixin, CreateView):
         form.instance.submitter = self.request.user
         return super().form_valid(form)
 
+    # def send_message_when_photo_uploaded(self, request):
+    #     serializer = PhotoSerializer()
+    #     publish('image uploaded', serializer.data)
 
 # checks if the user that’s trying to update or delete a photo 
 # actually submitted it
