@@ -19,13 +19,13 @@ class Photo(models.Model):
 
 
     def save(self, *args, **kwargs):
-        # photo = super().save(force_insert, force_update, using, update_fields)
-        # send_message({'photo_id': photo.id})
-        # return photo
-        photo = super().save(self)
-        send_message("New image uploaded", {
-            "id": self.id,
-            "title": self.title,
-            "image": self.image.path
-        })
+        pk = self.pk
+        photo = super().save(force_insert=False, force_update=False, using=None, update_fields=None)
+        if pk is None:
+            send_message("New image uploaded", {
+                "id": self.pk,
+                "title": self.title,
+                "not_hotdog_flag": self.not_hotdog_flag,
+                "image": self.image.path,
+            })
         return photo
