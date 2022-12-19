@@ -13,8 +13,6 @@ from django.urls import reverse_lazy
 from .models import Photo
 # to make next and previous buttons
 from next_prev import next_in_order, prev_in_order
-# to send a message with the rabbitmq
-from api.serializers import PhotoSerializer
 
 
 # Listing all photos on the site
