@@ -1,7 +1,7 @@
 import pika, time, json
 
 # establishing a connection with the RabbitMQ server
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost', heartbeat=600, blocked_connection_timeout=300))
 channel = connection.channel()
 
 
