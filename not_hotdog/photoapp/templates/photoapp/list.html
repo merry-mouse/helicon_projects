@@ -11,7 +11,7 @@
       />
     </a>
   </div>
-  {% endfor %} {% else %} {% for photo in photos %} {% if not photo.tags.all %}
+  {% endfor %} {% else %} {% for photo in photos %} {% if photo.not_hotdog_flag == False %}
   <div class="col-lg-3 col-md-4 col-xs-6">
     <a href="{% url 'photo:detail' photo.id %}" class="d-block mb-4 h-100">
       <img
