@@ -1,4 +1,3 @@
-# import pika, sys, os
 import json
 import pika
 import django
@@ -32,19 +31,22 @@ def callback(ch, method, properties, body):
 
 def send_request_to_image_recognition_model(id, path_to_uploaded_image):
     # sometimes hugging face model asks for additional time for loading, when it happens we want to try again a few times until we have the score
-    MAX_TRIES = 2
+    MAX_TRIES = 5
     # try to get reulting scores from the model
     scores_list_of_dicts = query(path_to_uploaded_image)
     # we either get a list of dicts with scores or one dict with the error msg
     # if it is a 1 dict with error we will get key error and the we want to send 
     # the image to the model api again in max of MAX_TRIES attempts
     if type(scores_list_of_dicts) == list:
-        # eerything fine, we got the scores, send no need to send a query again, just change flags according to the scores
+        # if evrything fine, we got the scores, no need to send a query again, just change flags according to the scores
         check_if_hotdog_and_change_flag(id, scores_list_of_dicts)
     else:
+        waiting_time = 3 #sec
         for i in range(MAX_TRIES):
             print(f"Model required more time, starting another query, attempt number {i}...")
+            time.sleep(waiting_time)
             scores_list_of_dicts = query(path_to_uploaded_image)
+            waiting_time = waiting_time*2
             if type(scores_list_of_dicts) == list:
                 check_if_hotdog_and_change_flag(scores_list_of_dicts)
                 break
@@ -60,7 +62,7 @@ def query(path_to_uploaded_image):
         data = f.read()
     response = requests.request("POST", API_URL, headers=headers, data=data)
     print(response)
-    time.sleep(2)
+    time.sleep(1)
     scores_list_of_dicts = json.loads(response.content.decode("utf-8"))
     print("\njson response from the model with API: ", scores_list_of_dicts)
     return scores_list_of_dicts
@@ -83,7 +85,7 @@ def check_if_hotdog_and_change_flag(id, scores_list_of_dicts):
         print("\nHotdog score is too low, setting image not_hotdog_flag to True.\n")
         image_object.not_hotdog_flag = True
         image_object.save()
-        print("\nChanged not_hotdog_flag to True, it is not a hotdog")
+        print("\nChanged not_hotdog_flag to True, it is NOT a hotdog")
     print("---------------------------------------------------")
 
 
