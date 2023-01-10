@@ -21,7 +21,7 @@ class Photo(models.Model):
     def save(self, *args, **kwargs):
         pk = self.pk
         photo = super().save(force_insert=False, force_update=False, using=None, update_fields=None)
-        if pk is None:
+        if pk is None: # if it was a newly created file, send a message
             send_message("New image uploaded", {
                 "id": self.pk,
                 "title": self.title,
