@@ -74,8 +74,7 @@ def check_if_hotdog_and_change_flag(id, scores_list_of_dicts):
     probability_border_value = 0.8 # we agreed to count is as a hotdog if hotdog score is more than 80%
     # separating scores values from the received list
     hotdog_score = scores_list_of_dicts[0]['score'] # probability, float value from 0 to 1
-    not_hotdog_score = scores_list_of_dicts[1]['score'] # probability, float value from 0 to 1
-    print("\nHotdog score = ", hotdog_score, "\n","NOT Hotdog score = ", not_hotdog_score)
+    print("\nHotdog score = ", hotdog_score, "\n")
     if hotdog_score > probability_border_value:
         print("\nHotdog score was higher than 80%, setting image not_hotdog_flag to False.")
         image_object.not_hotdog_flag = False
